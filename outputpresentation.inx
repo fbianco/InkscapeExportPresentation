@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <_name>Output Presentation</_name>
+  <id>fbianco.effect.OutputPresentation</id>
+    <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+    <dependency type="executable" location="extensions">outputpresentation.py</dependency>
+    <dependency type="executable" location="extensions">inkex.py</dependency>
+  <param name="directory" type="string" _gui-text="Output directory">./output</param>
+  <param name="output" type="string" _gui-text="Output name (will be overwritten if exists !)">result</param>
+  <param name="foreground" type="string" _gui-text="Foreground layer">foreground</param>
+  <param name="background" type="string" _gui-text="Background layer">background</param>
+  <param name="title" type="string" _gui-text="Presentation title">title</param>
+  <param name="author" type="string" _gui-text="Author name">author</param>
+  <param name="subject" type="string" _gui-text="Subject">subject</param>
+  <param name="keywords" type="string" _gui-text="Keywords (separated by ',')">keywords</param>
+  <effect needs-live-preview="false">
+    <object-type>all</object-type>
+    <effects-menu>
+       <submenu _name="Export presentation"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions" interpreter="python">outputpresentation.py</command>
+  </script>
+</inkscape-extension>
+
