@@ -7,6 +7,7 @@ from inkex import NSS
 
 DEBUG = False
 KEEPTEMP = False # keep temporary files
+OUTPUTPDFMARKS = False # export pdfmarks file (usefull to join many SVG presentation)
 
 try:
     from subprocess import Popen, PIPE
@@ -172,7 +173,7 @@ class OutputPresentation(inkex.Effect):
         pdfmarks.close()
 
         # Let's now join the pdf
-        command = 'gs -dBATCH -dNOPAUSE -dAutoRotatePages=/None -sPAPERSIZE=A4 -sDEVICE=pdfwrite -sOutputFile="{0}" {1}/export_[0-9][0-9][0-9]_*.pdf "{2}"'.format(
+        command = 'gs -r120 -dBATCH -dNOPAUSE -dPDFSETTINGS=/prepress -dAutoRotatePages=/None -sPAPERSIZE=A4 -sDEVICE=pdfwrite -sOutputFile="{0}" {1}/export_[0-9][0-9][0-9]_*.pdf "{2}"'.format(
                     output_name, tempdir, pdfmarks_file)
         if bsubprocess:
             p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE)
@@ -183,11 +184,18 @@ class OutputPresentation(inkex.Effect):
             _, f, err = os.open3(command)
         f.close()
 
+	# Store pdfmarks
+	if OUTPUTPDFMARKS:
+	    import shutil
+	    shutil.move(pdfmarks_file, output_name+'.marks')
+
         # Clean temps
         if not KEEPTEMP:
             for f in os.listdir(tempdir):
                 os.remove(os.path.join(tempdir,f))
             os.removedirs(tempdir)
+        else:
+            inkex.errormsg('Temporary files stored in %s' % tempdir)
 
 if __name__ == '__main__':
     e = OutputPresentation()
